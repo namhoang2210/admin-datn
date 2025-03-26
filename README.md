@@ -8,7 +8,9 @@ yarn install
 ```
 
 ### Update file .env
-NEXT_PUBLIC_API_URL=Your_api_domain (example: NEXT_PUBLIC_API_URL=https://eecd-222-252-22-40.ngrok-free.app)
+Open file `.env` and update NEXT_PUBLIC_API_URL=Your_api_domain 
+
+(example: NEXT_PUBLIC_API_URL=https://eecd-222-252-22-40.ngrok-free.app)
 
 ### Run the development server:
 
