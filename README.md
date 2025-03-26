@@ -1,5 +1,5 @@
 ## Getting Started
-# First, install dependence:
+### First, install dependence:
 
 ```bash
 npm install
@@ -7,10 +7,10 @@ npm install
 yarn install
 ```
 
-# Update file .env
+### Update file .env
 NEXT_PUBLIC_API_URL=Your_api_domain (example: NEXT_PUBLIC_API_URL=https://eecd-222-252-22-40.ngrok-free.app)
 
-# Run the development server:
+### Run the development server:
 
 ```bash
 npm run dev
