@@ -9,7 +9,7 @@ import LastPageIcon from "@mui/icons-material/LastPage";
 import { useTheme } from "@mui/material/styles";
 import Link from "next/link";
 import styles from "@/styles/PageTitle.module.css";
-import axios from "axios";
+import axios from "@/lib/axios";
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 

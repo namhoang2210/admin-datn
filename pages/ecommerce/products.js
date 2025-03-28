@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import * as React from "react";
-import axios from "axios";
+import axios from "@/lib/axios";
 import { Box, Typography, Button, Grid, Modal, Fade, Backdrop, TextField, FormControl, InputLabel, Select, MenuItem, Card, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow, IconButton, Tooltip } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import FirstPageIcon from "@mui/icons-material/FirstPage";

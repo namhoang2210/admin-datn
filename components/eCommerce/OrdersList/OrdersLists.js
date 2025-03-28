@@ -1,6 +1,6 @@
 // OrdersLists.js
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/lib/axios";
 import {
   Box, Card, Typography, FormControl, InputLabel, Select, MenuItem,
   Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow,
@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const api = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const api = process.env.NEXT_PUBLIC_API_URL;
 
 const OrdersLists = () => {
   const [orders, setOrders] = useState([]);
@@ -69,6 +69,8 @@ const OrdersLists = () => {
   }, []);
 
   const getUserName = (userId) => {
+    console.log("user", users);
+    console.log("userId", userId);
     const user = users.find(user => user.id === userId);
     return user ? user.name : "Unknown";
   };
