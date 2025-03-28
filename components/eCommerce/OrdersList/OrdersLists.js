@@ -58,15 +58,33 @@ const OrdersLists = () => {
     }
   };
 
-  const updateOrderStatus = async (orderId, newStatus) => {
+  const updateOrderStatus = async (orderId, newStatus, currentStatus) => {
+    const validTransitions = {
+      PENDING: ["CONFIRMED", "CANCELLED"],
+      CONFIRMED: ["PAID", "CANCELLED"],
+      PAID: ["COMPLETED"],
+      CANCELLED: [],
+      COMPLETED: [],
+    };
+  
+    const allowedNextStatuses = validTransitions[currentStatus] || [];
+  
+    if (!allowedNextStatuses.includes(newStatus)) {
+      alert(`Không thể chuyển từ trạng thái ${currentStatus} sang ${newStatus}`);
+      return;
+    }
+  
     try {
-      await axios.put(`${api}/api/admin/orders/${orderId}/status`, { orderStatus: newStatus });
+      await axios.put(`${api}/api/admin/orders/${orderId}/status`, {
+        orderStatus: newStatus,
+      });
       alert("Cập nhật trạng thái thành công!");
       fetchOrders();
     } catch (err) {
       console.error("Lỗi khi cập nhật trạng thái:", err);
     }
   };
+  
 
   useEffect(() => {
     fetchOrders();
@@ -133,7 +151,9 @@ const OrdersLists = () => {
                     <Select
                       size="small"
                       value={order.orderStatus}
-                      onChange={(e) => updateOrderStatus(order.orderId, e.target.value)}
+                      onChange={(e) =>
+                        updateOrderStatus(order.orderId, e.target.value, order.orderStatus)
+                      }
                     >
                       {orderStatuses.map(status => (
                         <MenuItem key={status} value={status}>{status}</MenuItem>
