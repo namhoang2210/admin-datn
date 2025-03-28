@@ -17,15 +17,22 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import Logout from "@mui/icons-material/Logout";
+import { useRouter } from "next/router";
 
 const Profile = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const router = useRouter();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    router.push("/authentication/logout/");
   };
   return (
     <>
@@ -177,19 +184,13 @@ const Profile = () => {
 
         <Divider />
 
-        <MenuItem>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon sx={{ mr: "-8px", mt: "-3px" }}>
             <Logout fontSize="small" />
           </ListItemIcon>
-
-          <Link
-            href="/authentication/logout/"
-            fontSize="13px"
-            color="inherit"
-            underline="none"
-          >
+          <Typography fontSize="13px" color="inherit">
             Logout
-          </Link>
+          </Typography>
         </MenuItem>
       </Menu>
     </>

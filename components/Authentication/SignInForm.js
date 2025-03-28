@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Grid from "@mui/material/Grid";
 import { Typography } from "@mui/material";
@@ -8,20 +8,46 @@ import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import styles from "@/components/Authentication/Authentication.module.css";
+import { useRouter } from "next/router";
+import axios from "@/lib/axios";
 
 const SignInForm = () => {
-  const handleSubmit = (event) => {
+  const router = useRouter();
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setError("");
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const email = data.get("email");
+    const password = data.get("password");
+
+    try {
+      const res = await axios.post("https://apt-electric-oriole.ngrok-free.app/api/admin/login", {
+        username: email,
+        password: password,
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true"
+        }
+      });
+
+      const { token, userId } = res.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("userId", userId);
+      router.push("/"); // chuyển về trang chính
+    } catch (err) {
+      console.error(err);
+      setError("Đăng nhập thất bại. Vui lòng kiểm tra lại tài khoản.");
+    }
   };
 
   return (
     <>
       <div className="authenticationBox">
+       
         <Box
           component="main"
           sx={{
@@ -139,6 +165,9 @@ const SignInForm = () => {
                       />
                     </Grid>
                   </Grid>
+                  <Typography color="error" sx={{ mt: 2 }}>
+                    {error}
+                  </Typography>
                 </Box>
 
                 <Grid container alignItems="center" spacing={2}>

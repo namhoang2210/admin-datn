@@ -43,7 +43,12 @@ const OrdersLists = () => {
     setUsers(data);
   };
 
-  const deleteOrder = async (orderId) => {
+  const deleteOrder = async (orderId, status) => {
+    if (status !== "PENDING") {
+      alert("Chỉ có thể xoá đơn hàng PENDING");
+      return;
+    }
+
     if (!confirm("Bạn có chắc muốn xoá đơn hàng này?")) return;
     try {
       await axios.delete(`${api}/api/admin/orders/${orderId}`);
@@ -69,8 +74,6 @@ const OrdersLists = () => {
   }, []);
 
   const getUserName = (userId) => {
-    console.log("user", users);
-    console.log("userId", userId);
     const user = users.find(user => user.id === userId);
     return user ? user.name : "Unknown";
   };
@@ -138,7 +141,7 @@ const OrdersLists = () => {
                     </Select>
                   </TableCell>
                   <TableCell>
-                    <IconButton color="error" onClick={() => deleteOrder(order.orderId)}>
+                    <IconButton color="error" onClick={() => deleteOrder(order.orderId, status)}>
                       <DeleteIcon />
                     </IconButton>
                   </TableCell>
