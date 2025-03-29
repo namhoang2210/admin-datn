@@ -77,6 +77,7 @@ export default function Products() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [open, setOpen] = React.useState(false);
   const [categorySelect, setCategorySelect] = React.useState("");
+  const [typeSelect, setTypeSelect] = React.useState("");
   const [editingProduct, setEditingProduct] = React.useState(null);
 
   const handleOpen = () => setOpen(true);
@@ -84,6 +85,7 @@ export default function Products() {
     setOpen(false);
     setEditingProduct(null);
     setCategorySelect("");
+    setTypeSelect("");
   };
   const handleCategoryChange = (event) => {
     setCategorySelect(Number(event.target.value));
@@ -95,7 +97,8 @@ export default function Products() {
         axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/products`),
         axios.get(`${process.env.NEXT_PUBLIC_API_URL}/user/categories/all`),
       ]);
-      setProducts(productRes.data);
+      const sortedProducts = productRes.data.sort((a, b) => b.bicycleId - a.bicycleId);
+      setProducts(sortedProducts);
       setCategories(categoryRes.data);
     } catch (error) {
       console.error("Lỗi khi fetch dữ liệu:", error);
@@ -117,9 +120,9 @@ export default function Products() {
       description: data.get("description"),
       image: data.get("imageUrl"),
       rating: 5.0,
-      type: "Road",
+      type: typeSelect,
       originalPrice: parseFloat(data.get("price")),
-      quantity: parseInt(data.get("stock"), 10),
+      quantity: 0,
       categoryId: parseInt(categorySelect, 10),
     };
   
@@ -159,6 +162,7 @@ export default function Products() {
   const handleEdit = (product) => {
     setEditingProduct(product);
     setCategorySelect(product.categoryId);
+    setTypeSelect(product.type);
     setOpen(true);
   };
 
@@ -190,7 +194,6 @@ export default function Products() {
                 <TableCell>Category</TableCell>
                 <TableCell align="center">Price</TableCell>
                 <TableCell align="center">Orders</TableCell>
-                <TableCell align="center">Stock</TableCell>
                 <TableCell align="center">Rating</TableCell>
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
@@ -207,7 +210,6 @@ export default function Products() {
                   <TableCell>{row.category?.name}</TableCell>
                   <TableCell align="center">${row.originalPrice}</TableCell>
                   <TableCell align="center">0</TableCell>
-                  <TableCell align="center">{row.quantity}</TableCell>
                   <TableCell align="center">{row.rating}</TableCell>
                   <TableCell align="right">
                     <Tooltip title="View" placement="top"><IconButton size="small" color="info"><VisibilityIcon fontSize="inherit" /></IconButton></Tooltip>
@@ -284,7 +286,7 @@ export default function Products() {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12}>
                   <Typography sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}>Price</Typography>
                   <TextField 
                     name="price" required fullWidth label="$0" type="number" InputProps={{ style: { borderRadius: 8 } }} 
@@ -292,12 +294,20 @@ export default function Products() {
                   />
                 </Grid>
 
-                <Grid item xs={12} md={6}>
-                  <Typography sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}>Stock</Typography>
-                  <TextField 
-                    name="stock" required fullWidth label="0" type="number" InputProps={{ style: { borderRadius: 8 } }} 
-                    defaultValue={editingProduct?.quantity || ""}
-                  />
+                <Grid item xs={12}>
+                  <Typography sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}>Category</Typography>
+                  <FormControl fullWidth>
+                    <InputLabel>Type</InputLabel>
+                    <Select
+                      value={typeSelect || ""}
+                      label="Type"
+                      onChange={(e) => setTypeSelect(e.target.value)}
+                    >
+                        <MenuItem value="HOT">HOT</MenuItem>
+                        <MenuItem value="NEW">NEW</MenuItem>
+                        <MenuItem value="SALE">SALE</MenuItem>
+                    </Select>
+                  </FormControl>
                 </Grid>
 
                 <Grid item xs={12}>
