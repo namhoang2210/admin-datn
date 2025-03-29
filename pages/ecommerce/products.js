@@ -295,7 +295,7 @@ export default function Products() {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <Typography sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}>Category</Typography>
+                  <Typography sx={{ fontWeight: "500", fontSize: "14px", mb: "12px" }}>Type</Typography>
                   <FormControl fullWidth>
                     <InputLabel>Type</InputLabel>
                     <Select
